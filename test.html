@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <title>
+            The Better Sidebar
+        </title>
+        <script src="jquery.min.js"></script>
+        <script src="filelistobject.js"></script>
+        <script src="sidebar.js"></script>
+    </head>
+
+    <body>
+        <style>
+            .fill {
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <div id="whole-thing-container" class="fill"></div>
+    </body>
+
+    <script>
+
+    var appContainer = document.getElementById("whole-thing-container");
+
+    sidebar = new Sidebar(appContainer, jsonSidebarObject);
+
+    </script>
+
+</html>
+
+
+
