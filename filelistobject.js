@@ -19,6 +19,12 @@ jsonSidebarObject = {
                     { name: "myFile2", children: [] },
                     { name: "myFile11", children: [] },
                     { name: "myFile12", children: [] },
+                    {
+                        type: "directory",
+                        name: "my empty directory",
+                        children: [] ,
+                    } ,
+                    { name: "more file.txt", children: [] },
                 ] ,
             } ,
             {
