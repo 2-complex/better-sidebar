@@ -30,3 +30,7 @@ div.sidebar-list {
     margin-left: 1em;
 }
 
+div.sidebar-label > span.sidebar-arrow {
+    display: inline-block;
+    width: 20px;
+}

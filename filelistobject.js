@@ -4,12 +4,17 @@ jsonSidebarObject = {
         name: "root",
         children: [
             {
-                name: "MyDrive",
+                type: "directory",
+                name: "Game",
                 children: [
-                    { name: "jeff", children: [
-                        { name: "A.xtx", children: [] },
-                        { name: "B.xtx", children: [] },
-                    ] },
+                    {
+                        type: "directory",
+                        name: "jeff",
+                        children: [
+                            { name: "A.xtx", children: [] },
+                            { name: "B.xtx", children: [] },
+                        ]
+                    },
                     { name: "myFile1", children: [] },
                     { name: "myFile2", children: [] },
                     { name: "myFile11", children: [] },
@@ -17,6 +22,7 @@ jsonSidebarObject = {
                 ] ,
             } ,
             {
+                type: "directory",
                 name: "MyDrive2",
                 children: [
                     { name: "myOtherFile1", children: [] },

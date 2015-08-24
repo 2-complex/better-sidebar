@@ -35,14 +35,21 @@ Sidebar.join = function(a, b)
 Sidebar.prototype.makeDivForRecord = function(record, parent_path)
 {
     var blockDiv = $('<div class="sidebar-block">');
-    var labelDiv = $('<div class="sidebar-label">')
-        .append( $('<span>').html('+ ') )
-        .append( $('<span>').html(record.name) );
-    var listDiv = $('<div class="sidebar-list">');
-    labelDiv.on( 'click', this.makeExpandFunction(blockDiv,
-        Sidebar.join(parent_path, record.name) ) );
-    blockDiv.append(labelDiv);
-    blockDiv.append(listDiv);
+    var labelDiv = $('<div class="sidebar-label">');
+    var arrow = $('<span class="sidebar-arrow">');
+
+    blockDiv.append( labelDiv );
+    labelDiv.append( arrow );
+    labelDiv.append( $('<span>').html(record.name) );
+
+    if( record.type == 'directory' )
+    {
+        arrow.html('+ ');
+        blockDiv.append($('<div class="sidebar-list" style="display:none;">'));
+        labelDiv.on( 'click', this.makeExpandFunction(blockDiv,
+            Sidebar.join(parent_path, record.name) ) );
+    }
+
     return blockDiv;
 }
 
@@ -51,21 +58,25 @@ Sidebar.prototype.makeExpandFunction = function(newdiv, path)
     var thisSidebar = this;
     return function(evt)
     {
-        var population = newdiv.find( "> div.sidebar-list >" ).length;
         var listDiv = newdiv.find( "> div.sidebar-list" );
+        var arrow = newdiv.find( "> div.sidebar-label > span.sidebar-arrow" );
 
-        if ( population )
+        if( listDiv.css('display') == "none" )
         {
+            arrow.html("- ");
+            listDiv.css('display', "inline-block");
             listDiv.empty();
-        }
-        else
-        {
             var pathls = thisSidebar.fileList.ls(path);
             for( var i = 0; i < pathls.length; i++ )
             {
                 listDiv.append(
-                    thisSidebar.makeDivForRecord(pathls[i], path) );
+                    thisSidebar.makeDivForRecord( pathls[i], path ));
             }
+        }
+        else
+        {
+            arrow.html("+ ");
+            listDiv.css('display', "none");
         }
     };
 }
