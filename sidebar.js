@@ -60,13 +60,18 @@ Sidebar.prototype.makeDivForRecord = function(record, parent_path)
 
     if( record.type == 'directory' )
     {
-        arrow.html('+ ');
+        arrow.empty().append( dgn.getIconSvg("right") );
         arrow.addClass('sidebar-expandable');
         var expandFunction = this.makeExpandFunction(blockDiv, path );
         labelDiv.data("expandFunction", expandFunction);
-        labelDiv.data("path", path);
         arrow.on( 'click', expandFunction );
     }
+    else
+    {
+        labelDiv.data("expandFunction", function(){} );
+    }
+
+    labelDiv.data("path", path);
 
     return blockDiv;
 }
@@ -82,11 +87,11 @@ Sidebar.prototype.makeExpandFunction = function(block, path)
         if( listDiv.length )
         {
             listDiv.remove();
-            arrow.html("+ ");
+            arrow.empty().append( dgn.getIconSvg("right") );
         }
         else
         {
-            arrow.html("- ");
+            arrow.empty().append( dgn.getIconSvg("down") );
 
             listDiv = $('<div class="sidebar-list">');
             block.append(listDiv);
@@ -144,7 +149,7 @@ Sidebar.prototype.keyboardDownArrow = function()
 
 Sidebar.prototype.keyboardRightArrow = function()
 {
-    if( this.selectedDiv && this.selectedDiv.data('expandFunction') )
+    if( this.selectedDiv )
     {
         this.selectedDiv.data('expandFunction')();
     }
@@ -152,7 +157,7 @@ Sidebar.prototype.keyboardRightArrow = function()
 
 Sidebar.prototype.keyboardLeftArrow = function()
 {
-    if( this.selectedDiv && this.selectedDiv.data('expandFunction') )
+    if( this.selectedDiv )
     {
         this.selectedDiv.data('expandFunction')();
     }

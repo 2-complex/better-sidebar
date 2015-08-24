@@ -54,3 +54,16 @@ div.sidebar-selected {
     background-color:#033;
 }
 
+svg.icon {
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+svg.icon path {
+    stroke: #eee;
+    fill: #eee;
+    stroke-miterlimit: 11;
+    stroke-linecap: round;
+}
