@@ -1,0 +1,32 @@
+
+div.sidebar-menubar {
+    display: inline-block;
+    position: absolute;
+    left:0px;
+    right:0px;
+    top:0px;
+    height: 2em;
+    line-height: 2em;
+    background-color: #333;
+    color:white;
+}
+
+div.sidebar {
+    display: inline-block;
+    color:#eee;
+    position: absolute;
+    left:0px;
+    width:400px;
+    top:2em;
+    bottom: 0px;
+    background-color: black;
+}
+
+div.sidebar-label {
+    cursor: hand;
+}
+
+div.sidebar-list {
+    margin-left: 1em;
+}
+
