@@ -11,21 +11,38 @@ Sidebar = function(containerDiv, fileList)
     var rootls = this.fileList.ls('');
     for( var i = 0; i < rootls.length; i++ )
     {
-        sidebarBody.append(this.makeDivForRecord(rootls[i]));
+        sidebarBody.append(this.makeDivForRecord(rootls[i], ""));
     }
 }
 
-Sidebar.prototype.makeDivForRecord = function(record)
+Sidebar.escapeRegExp = function(string)
+{
+    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
+
+Sidebar.replaceAll = function(string, find, replace)
+{
+    return string.replace(new RegExp(Sidebar.escapeRegExp(find), 'g'), replace);
+}
+
+Sidebar.join = function(a, b)
+{
+    if ( a == "" )
+        return b;
+    return Sidebar.replaceAll(a.split('/').concat(b.split('/')).join('/'), '//', '/')
+}
+
+Sidebar.prototype.makeDivForRecord = function(record, parent_path)
 {
     var blockDiv = $('<div class="sidebar-block">');
-    var labelDiv = $('<div class="sidebar-label">').html('+ ' + record.name);
+    var labelDiv = $('<div class="sidebar-label">')
+        .append( $('<span>').html('+ ') )
+        .append( $('<span>').html(record.name) );
     var listDiv = $('<div class="sidebar-list">');
-
-    labelDiv.on( 'click', this.makeExpandFunction(blockDiv, record.name) );
-
+    labelDiv.on( 'click', this.makeExpandFunction(blockDiv,
+        Sidebar.join(parent_path, record.name) ) );
     blockDiv.append(labelDiv);
     blockDiv.append(listDiv);
-
     return blockDiv;
 }
 
@@ -47,7 +64,7 @@ Sidebar.prototype.makeExpandFunction = function(newdiv, path)
             for( var i = 0; i < pathls.length; i++ )
             {
                 listDiv.append(
-                    thisSidebar.makeDivForRecord(pathls[i]) );
+                    thisSidebar.makeDivForRecord(pathls[i], path) );
             }
         }
     };

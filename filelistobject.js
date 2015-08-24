@@ -6,7 +6,7 @@ jsonSidebarObject = {
             {
                 name: "MyDrive",
                 children: [
-                    { name: "mySubdirectory1", children: [
+                    { name: "jeff", children: [
                         { name: "A.xtx", children: [] },
                         { name: "B.xtx", children: [] },
                     ] },
@@ -28,26 +28,27 @@ jsonSidebarObject = {
         ] ,
     } ,
 
-    ls: function (path, cursor)
+    findChild: function( cursor, name )
     {
-        cursor = cursor || this.root;
+        var child = {children: []};
+
+        for( var i = 0; i < cursor.children.length; i++ )
+        {
+            if( cursor.children[i].name == name )
+            {
+                return cursor.children[i];
+            }
+        }
+    } ,
+
+    ls: function( path )
+    {
+        cursor = this.root;
 
         while( path != '' )
         {
-            var newCursor = {children: []};
-            var name = path.split('/').slice(-1);
-
-            for( var i = 0; i < cursor.children.length; i++ )
-            {
-                if( cursor.children[i].name == name )
-                {
-                    newCursor = cursor.children[i];
-                    break;
-                }
-            }
-
-            path = path.split('/').slice(1).join('/'),
-            cursor = newCursor;
+            cursor = this.findChild( cursor, path.split('/')[0] );
+            path = path.split('/').slice(1).join('/');
         }
 
         return cursor.children;
