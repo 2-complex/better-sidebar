@@ -38,17 +38,20 @@ Sidebar.prototype.makeDivForRecord = function(record, parent_path)
     var labelDiv = $('<div class="sidebar-label">');
     var arrow = $('<span class="sidebar-arrow">');
 
+    var path = Sidebar.join(parent_path, record.name);
+
     blockDiv.append( labelDiv );
     labelDiv.append( arrow );
     labelDiv.append( $('<span>').html(record.name) );
+
+    labelDiv.on( 'click', this.makeSelectFunction( labelDiv, path ) );
 
     if( record.type == 'directory' )
     {
         arrow.html('+ ');
         arrow.addClass('sidebar-expandable');
         blockDiv.append($('<div class="sidebar-list" style="display:none;">'));
-        arrow.on( 'click', this.makeExpandFunction(blockDiv,
-            Sidebar.join(parent_path, record.name) ) );
+        arrow.on( 'click', this.makeExpandFunction(blockDiv, path ) );
     }
 
     return blockDiv;
@@ -79,6 +82,20 @@ Sidebar.prototype.makeExpandFunction = function(newdiv, path)
             arrow.html("+ ");
             listDiv.css('display', "none");
         }
+    };
+}
+
+Sidebar.prototype.makeSelectFunction = function(newdiv, path)
+{
+    var thisSidebar = this;
+    return function(evt)
+    {
+        if ( thisSidebar.selectedDiv )
+            thisSidebar.selectedDiv.removeClass("sidebar-selected");
+
+        thisSidebar.selectedDiv = newdiv;
+        thisSidebar.selectedDiv.addClass("sidebar-selected");
+        thisSidebar.selectedPath = path;
     };
 }
 

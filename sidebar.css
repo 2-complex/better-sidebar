@@ -38,3 +38,8 @@ div.sidebar-label > span.sidebar-arrow {
     display: inline-block;
     width: 20px;
 }
+
+div.sidebar-selected {
+    background-color:#033;
+}
+
