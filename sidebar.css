@@ -23,6 +23,10 @@ div.sidebar {
 }
 
 div.sidebar-label {
+    cursor: default;
+}
+
+div.sidebar-label > span.sidebar-arrow.sidebar-expandable {
     cursor: hand;
 }
 

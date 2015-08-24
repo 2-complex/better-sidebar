@@ -45,8 +45,9 @@ Sidebar.prototype.makeDivForRecord = function(record, parent_path)
     if( record.type == 'directory' )
     {
         arrow.html('+ ');
+        arrow.addClass('sidebar-expandable');
         blockDiv.append($('<div class="sidebar-list" style="display:none;">'));
-        labelDiv.on( 'click', this.makeExpandFunction(blockDiv,
+        arrow.on( 'click', this.makeExpandFunction(blockDiv,
             Sidebar.join(parent_path, record.name) ) );
     }
 
