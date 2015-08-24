@@ -4,7 +4,7 @@ jsonSidebarObject = {
         name: "root",
         children: [
             {
-                type: "directory",
+                type: "drive",
                 name: "Game",
                 children: [
                     {
@@ -28,7 +28,7 @@ jsonSidebarObject = {
                 ] ,
             } ,
             {
-                type: "directory",
+                type: "drive",
                 name: "MyDrive2",
                 children: [
                     { name: "myOtherFile1", children: [] },

@@ -55,10 +55,19 @@ Sidebar.prototype.makeDivForRecord = function(record, parent_path)
 
     blockDiv.append( labelDiv );
     labelDiv.append( arrow );
-    labelDiv.append( $('<span>').html(record.name) );
+
+    var icon = dgn.getIconSvg({
+            "file":"file",
+            "directory":"folder",
+            "drive":"drive"
+        }[record.type] || "file");
+
+    labelDiv.append( icon, $('<span>').html(record.name) );
+
     labelDiv.on( 'click', this.makeSelectFunction( labelDiv, path ) );
 
-    if( record.type == 'directory' )
+    if( record.type == 'directory' ||
+        record.type == 'drive' )
     {
         arrow.empty().append( dgn.getIconSvg("right") );
         arrow.addClass('sidebar-expandable');
