@@ -1,9 +1,8 @@
 
-
 Sidebar = function(containerDiv, fileList)
 {
-    var menuBar = $('<div style="display: inline-block; position: absolute; left:0px; right:0px; top:0px; height: 2em; line-height: 2em; background-color: #333; color:white;">').appendTo(containerDiv);
-    var sidebarBody = $('<div style="display: inline-block; color:#eee; position: absolute; left:0px; width:400px; top:2em; bottom: 0px; background-color: black;">').appendTo(containerDiv);
+    var menuBar = $('<div class="sidebar-menubar">').appendTo(containerDiv);
+    var sidebarBody = $('<div class="sidebar">').appendTo(containerDiv);
 
     this.fileList = fileList;
     this.containerDiv = containerDiv;
@@ -18,16 +17,16 @@ Sidebar = function(containerDiv, fileList)
 
 Sidebar.prototype.makeDivForRecord = function(record)
 {
-    var topDiv = $('<div>');
-    topDiv.on('click', this.makeExpandFunction(topDiv, record.name) );
+    var blockDiv = $('<div class="sidebar-block">');
+    var labelDiv = $('<div class="sidebar-label">').html('+ ' + record.name);
+    var listDiv = $('<div class="sidebar-list">');
 
-    var itemDiv = $('<div>').html('+ ' + record.name);
-    var listDiv = $('<div class="sidebar-list-div">').html();
+    labelDiv.on( 'click', this.makeExpandFunction(blockDiv, record.name) );
 
-    topDiv.append(itemDiv);
-    topDiv.append(listDiv);
+    blockDiv.append(labelDiv);
+    blockDiv.append(listDiv);
 
-    return topDiv;
+    return blockDiv;
 }
 
 Sidebar.prototype.makeExpandFunction = function(newdiv, path)
@@ -35,11 +34,21 @@ Sidebar.prototype.makeExpandFunction = function(newdiv, path)
     var thisSidebar = this;
     return function(evt)
     {
-        var pathls = thisSidebar.fileList.ls(path);
-        for( var i = 0; i < pathls.length; i++ )
+        var population = newdiv.find( "> div.sidebar-list >" ).length;
+        var listDiv = newdiv.find( "> div.sidebar-list" );
+
+        if ( population )
         {
-            newdiv
-            .append( thisSidebar.makeDivForRecord(pathls[i]) );
+            listDiv.empty();
+        }
+        else
+        {
+            var pathls = thisSidebar.fileList.ls(path);
+            for( var i = 0; i < pathls.length; i++ )
+            {
+                listDiv.append(
+                    thisSidebar.makeDivForRecord(pathls[i]) );
+            }
         }
     };
 }
