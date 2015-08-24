@@ -41,6 +41,7 @@ div.sidebar-label > span.sidebar-arrow.sidebar-expandable {
 }
 
 div.sidebar-list {
+    display: inline-block;
     margin-left: 1em;
 }
 

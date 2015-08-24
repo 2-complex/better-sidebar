@@ -1,4 +1,5 @@
 
+
 Sidebar = function(containerDiv, fileList)
 {
     var menuBar = $('<div class="sidebar-menubar">').appendTo(containerDiv);
@@ -7,6 +8,19 @@ Sidebar = function(containerDiv, fileList)
     this.fileList = fileList;
     this.containerDiv = containerDiv;
     this.sidebarBody = sidebarBody;
+
+    this.sidebarBody.attr("tabIndex", "0");
+
+    var thisSidebar = this;
+    this.sidebarBody.keydown( function(evt)
+    {
+        ({
+            38: Sidebar.prototype.keyboardUpArrow,
+            40: Sidebar.prototype.keyboardDownArrow,
+            37: Sidebar.prototype.keyboardLeftArrow,
+            39: Sidebar.prototype.keyboardRightArrow,
+        }[evt.keyCode] || function(){} ).call(thisSidebar);
+    });
 
     var rootls = this.fileList.ls('');
     for( var i = 0; i < rootls.length; i++ )
@@ -35,40 +49,48 @@ Sidebar.join = function(a, b)
 Sidebar.prototype.makeDivForRecord = function(record, parent_path)
 {
     var blockDiv = $('<div class="sidebar-block">');
-    var labelDiv = $('<div class="sidebar-label">');
+    var labelDiv = $('<div class="sidebar-label sidebar-selectable">');
     var arrow = $('<span class="sidebar-arrow">');
-
     var path = Sidebar.join(parent_path, record.name);
 
     blockDiv.append( labelDiv );
     labelDiv.append( arrow );
     labelDiv.append( $('<span>').html(record.name) );
-
     labelDiv.on( 'click', this.makeSelectFunction( labelDiv, path ) );
 
     if( record.type == 'directory' )
     {
         arrow.html('+ ');
         arrow.addClass('sidebar-expandable');
-        blockDiv.append($('<div class="sidebar-list" style="display:none;">'));
-        arrow.on( 'click', this.makeExpandFunction(blockDiv, path ) );
+        var expandFunction = this.makeExpandFunction(blockDiv, path );
+        labelDiv.data("expandFunction", expandFunction);
+        labelDiv.data("path", path);
+        arrow.on( 'click', expandFunction );
     }
 
     return blockDiv;
 }
 
-Sidebar.prototype.makeExpandFunction = function(newdiv, path)
+Sidebar.prototype.makeExpandFunction = function(block, path)
 {
     var thisSidebar = this;
     return function(evt)
     {
-        var listDiv = newdiv.find( "> div.sidebar-list" );
-        var arrow = newdiv.find( "> div.sidebar-label > span.sidebar-arrow" );
+        var listDiv = block.find( "> div.sidebar-list" );
+        var arrow = block.find( "> div.sidebar-label > span.sidebar-arrow" );
 
-        if( listDiv.css('display') == "none" )
+        if( listDiv.length )
+        {
+            listDiv.remove();
+            arrow.html("+ ");
+        }
+        else
         {
             arrow.html("- ");
-            listDiv.css('display', "inline-block");
+
+            listDiv = $('<div class="sidebar-list">');
+            block.append(listDiv);
+
             listDiv.empty();
             var pathls = thisSidebar.fileList.ls(path);
             for( var i = 0; i < pathls.length; i++ )
@@ -77,12 +99,16 @@ Sidebar.prototype.makeExpandFunction = function(newdiv, path)
                     thisSidebar.makeDivForRecord( pathls[i], path ));
             }
         }
-        else
-        {
-            arrow.html("+ ");
-            listDiv.css('display', "none");
-        }
     };
+}
+
+Sidebar.prototype.select = function(newdiv, path)
+{
+    if ( this.selectedDiv )
+            this.selectedDiv.removeClass("sidebar-selected");
+
+    this.selectedDiv = newdiv;
+    this.selectedDiv.addClass("sidebar-selected");
 }
 
 Sidebar.prototype.makeSelectFunction = function(newdiv, path)
@@ -90,12 +116,45 @@ Sidebar.prototype.makeSelectFunction = function(newdiv, path)
     var thisSidebar = this;
     return function(evt)
     {
-        if ( thisSidebar.selectedDiv )
-            thisSidebar.selectedDiv.removeClass("sidebar-selected");
-
-        thisSidebar.selectedDiv = newdiv;
-        thisSidebar.selectedDiv.addClass("sidebar-selected");
-        thisSidebar.selectedPath = path;
+        thisSidebar.select(newdiv, path);
     };
+}
+
+Sidebar.prototype.keyboardUpArrow = function()
+{
+    var selectables = $("div.sidebar-selectable");
+    var index = selectables.index(this.selectedDiv);
+    if( index > 0 )
+    {
+        index--;
+        this.select( selectables.eq(index), "empty/some/path" );
+    }
+}
+
+Sidebar.prototype.keyboardDownArrow = function()
+{
+    var selectables = $("div.sidebar-selectable");
+    var index = selectables.index(this.selectedDiv);
+    if( index < selectables.length - 1 )
+    {
+        index++;
+        this.select( selectables.eq(index), "empty/some/path" );
+    }
+}
+
+Sidebar.prototype.keyboardRightArrow = function()
+{
+    if( this.selectedDiv && this.selectedDiv.data('expandFunction') )
+    {
+        this.selectedDiv.data('expandFunction')();
+    }
+}
+
+Sidebar.prototype.keyboardLeftArrow = function()
+{
+    if( this.selectedDiv && this.selectedDiv.data('expandFunction') )
+    {
+        this.selectedDiv.data('expandFunction')();
+    }
 }
 
