@@ -3,11 +3,19 @@
 Sidebar = function(containerDiv, fileList)
 {
     var menuBar = $('<div class="sidebar-menubar">').appendTo(containerDiv);
-    var sidebarBody = $('<div class="sidebar">').appendTo(containerDiv);
+    var sidebarContainer = $('<div class="sidebar-container">').appendTo(containerDiv);
+    var resizer = $('<div class="sidebar-resizer">').appendTo(sidebarContainer);
+    var sidebarBody = $('<div class="sidebar-body">').appendTo(sidebarContainer);
 
     this.fileList = fileList;
     this.containerDiv = containerDiv;
     this.sidebarBody = sidebarBody;
+
+    resizer.draggable({ axis: "x" });
+    resizer.on( "drag", function( event, ui )
+    {
+        sidebarContainer.css({width: ui.position.left + 6});
+    } );
 
     this.sidebarBody.attr("tabIndex", "0");
 
@@ -25,7 +33,7 @@ Sidebar = function(containerDiv, fileList)
     var rootls = this.fileList.ls('');
     for( var i = 0; i < rootls.length; i++ )
     {
-        sidebarBody.append(this.makeDivForRecord(rootls[i], ""));
+        this.sidebarBody.append(this.makeDivForRecord(rootls[i], ""));
     }
 }
 

@@ -2,6 +2,15 @@
 
 }
 
+div.sidebar {
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 400px;
+}
+
 div.sidebar-menubar {
     display: inline-block;
     position: absolute;
@@ -14,7 +23,29 @@ div.sidebar-menubar {
     color:white;
 }
 
-div.sidebar {
+div.sidebar-container {
+    display: inline-block;
+    color:#eee;
+    position: absolute;
+    left:0px;
+    width:400px;
+    top:2em;
+    bottom: 0px;
+    background-color: black;
+}
+
+div.sidebar-resizer {
+    display: inline-block;
+    background-color:#345;
+    cursor: ew-resize;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    width: 6px;
+}
+
+div.sidebar-body {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -26,8 +57,8 @@ div.sidebar {
     color:#eee;
     position: absolute;
     left:0px;
-    width:400px;
-    top:2em;
+    right:6px;
+    top:0px;
     bottom: 0px;
     background-color: black;
 }
