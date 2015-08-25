@@ -16,7 +16,7 @@ dgn.IconSvgs = {
 dgn.getIconSvg = function(name)
 {
     return $([
-        '<svg class="icon">',
+        '<svg class="icon" viewbox="0 0 25 25">',
         '<path transform="translate(3,18.5) scale(0.01,-0.01)" d="',
         dgn.IconSvgs[name].d,
         '"/></svg>'].join(' ') );

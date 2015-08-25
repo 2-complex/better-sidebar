@@ -14,7 +14,7 @@ Sidebar = function(containerDiv, fileList)
     resizer.draggable({ axis: "x" });
     resizer.on( "drag", function( event, ui )
     {
-        sidebarContainer.css({width: ui.position.left + 6});
+        sidebarContainer.css({width: ui.position.left + resizer.width()});
     } );
 
     this.sidebarBody.attr("tabIndex", "0");

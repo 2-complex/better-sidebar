@@ -63,16 +63,29 @@ div.sidebar-body {
     background-color: black;
 }
 
+div.sidebar-block {
+    display:block;
+}
+
 div.sidebar-label {
     cursor: default;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 div.sidebar-label > span.sidebar-arrow.sidebar-expandable {
     cursor: hand;
 }
 
+div.sidebar-label svg.icon {
+    width: 23px;
+    height: 23px;
+    margin: 3px;
+}
+
 div.sidebar-list {
-    display: inline-block;
+    display: block;
     margin-left: 1em;
 }
 
