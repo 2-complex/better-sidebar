@@ -61,6 +61,11 @@ div.sidebar-body {
     top:0px;
     bottom: 0px;
     background-color: black;
+    margin: 2px;
+}
+
+div.sidebar-body:focus  {
+    outline: 1px dotted hsla(239, 100%, 80%, 0.6);
 }
 
 div.sidebar-block {
@@ -79,9 +84,14 @@ div.sidebar-label > span.sidebar-arrow.sidebar-expandable {
 }
 
 div.sidebar-label svg.icon {
-    width: 23px;
-    height: 23px;
+    width: 20px;
+    height: 20px;
     margin: 3px;
+}
+
+div.sidebar-label svg.icon.type-icon path {
+    fill: #779;
+    stroke: #cc8ac1;
 }
 
 div.sidebar-list {

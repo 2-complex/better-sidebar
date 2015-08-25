@@ -11,7 +11,7 @@ Sidebar = function(containerDiv, fileList)
     this.containerDiv = containerDiv;
     this.sidebarBody = sidebarBody;
 
-    resizer.draggable({ axis: "x" });
+    resizer.draggable({ axis: "x", scroll: false });
     resizer.on( "drag", function( event, ui )
     {
         sidebarContainer.css({width: ui.position.left + resizer.width()});
@@ -68,7 +68,7 @@ Sidebar.prototype.makeDivForRecord = function(record, parent_path)
             "file":"file",
             "directory":"folder",
             "drive":"drive"
-        }[record.type] || "file");
+        }[record.type] || "file", "icon type-icon");
 
     labelDiv.append( icon, $('<span>').html(record.name) );
 

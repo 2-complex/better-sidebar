@@ -13,11 +13,11 @@ dgn.IconSvgs = {
     folder : { d:'M1536 224v704q0 40 -28 68t-68 28h-704q-40 0 -68 28t-28 68v64q0 40 -28 68t-68 28h-320q-40 0 -68 -28t-28 -68v-960q0 -40 28 -68t68 -28h1216q40 0 68 28t28 68zM1664 928v-704q0 -92 -66 -158t-158 -66h-1216q-92 0 -158 66t-66 158v960q0 92 66 158t158 66h320 q92 0 158 -66t66 -158v-32h672q92 0 158 -66t66 -158z' },
 }
 
-dgn.getIconSvg = function(name)
+dgn.getIconSvg = function(name, className)
 {
     return $([
-        '<svg class="icon" viewbox="0 0 25 25">',
-        '<path transform="translate(3,18.5) scale(0.01,-0.01)" d="',
+        '<svg class="' + (className || "icon") + '" viewbox="0 0 25 25">',
+        '<path transform="translate(3,17) scale(0.01,-0.01)" d="',
         dgn.IconSvgs[name].d,
         '"/></svg>'].join(' ') );
 }
