@@ -53,7 +53,7 @@ jsonSidebarObject = {
         }
     } ,
 
-    ls: function( path )
+    nodeForPath: function( path )
     {
         cursor = this.root;
 
@@ -63,7 +63,48 @@ jsonSidebarObject = {
             path = path.split('/').slice(1).join('/');
         }
 
-        return cursor.children;
+        return cursor;
+    } ,
+
+    ls: function( path )
+    {
+        return this.nodeForPath(path).children;
+    } ,
+
+    add: function( path, type )
+    {
+        this.nodeForPath( Path.parent(path) ).children.push(
+            {
+                name: path.split('/').slice(-1)[0],
+                type: type,
+                children: [],
+            });
     } ,
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

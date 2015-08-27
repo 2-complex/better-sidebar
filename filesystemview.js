@@ -56,6 +56,9 @@ FileSystemView.join = function(a, b)
 
 FileSystemView.prototype.makeDivForRecord = function(record, parent_path)
 {
+    console.log(record);
+
+
     var blockDiv = $('<div class="sidebar-block">');
     var labelDiv = $('<div class="sidebar-label sidebar-selectable">');
     var arrow = $('<span class="sidebar-arrow">');
@@ -127,7 +130,7 @@ FileSystemView.prototype.makeExpandFunction = function(block, path)
 FileSystemView.prototype.select = function(newdiv, path)
 {
     if ( this.selectedDiv )
-            this.selectedDiv.removeClass("sidebar-selected");
+        this.selectedDiv.removeClass("sidebar-selected");
 
     this.selectedDiv = newdiv;
     this.selectedDiv.addClass("sidebar-selected");
@@ -178,5 +181,44 @@ FileSystemView.prototype.keyboardLeftArrow = function()
     {
         this.selectedDiv.data('expandFunction')();
     }
+}
+
+
+FileSystemView.prototype.add = function(path, type)
+{
+    this.fileList.add(path, type);
+}
+
+FileSystemView.prototype.remove = function(path)
+{
+    this.fileList.remove(path);
+}
+
+FileSystemView.prototype.rename = function(oldpath, newname)
+{
+    this.fileList.remove(oldpath, newname);
+}
+
+FileSystemView.prototype.move = function(oldpath, newpath)
+{
+    this.fileList.move(oldpath, newname);
+}
+
+
+FileSystemView.prototype.getInfo = function(path)
+{
+    return {
+        path: "something wrong",
+        type: "file"
+    };
+}
+
+FileSystemView.prototype.getBlockDiv = function(path)
+{
+}
+
+FileSystemView.prototype.getFilenameDiv = function(path)
+{
+
 }
 
