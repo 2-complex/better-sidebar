@@ -1,6 +1,6 @@
 
 
-Sidebar = function(containerDiv, fileList)
+FileSystemView = function(containerDiv, fileList)
 {
     var menuBar = $('<div class="sidebar-menubar">').appendTo(containerDiv);
     var sidebarContainer = $('<div class="sidebar-container">').appendTo(containerDiv);
@@ -19,15 +19,15 @@ Sidebar = function(containerDiv, fileList)
 
     this.sidebarBody.attr("tabIndex", "0");
 
-    var thisSidebar = this;
+    var thisFileSystemView = this;
     this.sidebarBody.keydown( function(evt)
     {
         ({
-            38: Sidebar.prototype.keyboardUpArrow,
-            40: Sidebar.prototype.keyboardDownArrow,
-            37: Sidebar.prototype.keyboardLeftArrow,
-            39: Sidebar.prototype.keyboardRightArrow,
-        }[evt.keyCode] || function(){} ).call(thisSidebar);
+            38: FileSystemView.prototype.keyboardUpArrow,
+            40: FileSystemView.prototype.keyboardDownArrow,
+            37: FileSystemView.prototype.keyboardLeftArrow,
+            39: FileSystemView.prototype.keyboardRightArrow,
+        }[evt.keyCode] || function(){} ).call(thisFileSystemView);
     });
 
     var rootls = this.fileList.ls('');
@@ -37,29 +37,29 @@ Sidebar = function(containerDiv, fileList)
     }
 }
 
-Sidebar.escapeRegExp = function(string)
+FileSystemView.escapeRegExp = function(string)
 {
     return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
-Sidebar.replaceAll = function(string, find, replace)
+FileSystemView.replaceAll = function(string, find, replace)
 {
-    return string.replace(new RegExp(Sidebar.escapeRegExp(find), 'g'), replace);
+    return string.replace(new RegExp(FileSystemView.escapeRegExp(find), 'g'), replace);
 }
 
-Sidebar.join = function(a, b)
+FileSystemView.join = function(a, b)
 {
     if ( a == "" )
         return b;
-    return Sidebar.replaceAll(a.split('/').concat(b.split('/')).join('/'), '//', '/')
+    return FileSystemView.replaceAll(a.split('/').concat(b.split('/')).join('/'), '//', '/')
 }
 
-Sidebar.prototype.makeDivForRecord = function(record, parent_path)
+FileSystemView.prototype.makeDivForRecord = function(record, parent_path)
 {
     var blockDiv = $('<div class="sidebar-block">');
     var labelDiv = $('<div class="sidebar-label sidebar-selectable">');
     var arrow = $('<span class="sidebar-arrow">');
-    var path = Sidebar.join(parent_path, record.name);
+    var path = FileSystemView.join(parent_path, record.name);
 
     blockDiv.append( labelDiv );
     labelDiv.append( arrow );
@@ -93,9 +93,9 @@ Sidebar.prototype.makeDivForRecord = function(record, parent_path)
     return blockDiv;
 }
 
-Sidebar.prototype.makeExpandFunction = function(block, path)
+FileSystemView.prototype.makeExpandFunction = function(block, path)
 {
-    var thisSidebar = this;
+    var thisFileSystemView = this;
     return function(evt)
     {
         var listDiv = block.find( "> div.sidebar-list" );
@@ -114,17 +114,17 @@ Sidebar.prototype.makeExpandFunction = function(block, path)
             block.append(listDiv);
 
             listDiv.empty();
-            var pathls = thisSidebar.fileList.ls(path);
+            var pathls = thisFileSystemView.fileList.ls(path);
             for( var i = 0; i < pathls.length; i++ )
             {
                 listDiv.append(
-                    thisSidebar.makeDivForRecord( pathls[i], path ));
+                    thisFileSystemView.makeDivForRecord( pathls[i], path ));
             }
         }
     };
 }
 
-Sidebar.prototype.select = function(newdiv, path)
+FileSystemView.prototype.select = function(newdiv, path)
 {
     if ( this.selectedDiv )
             this.selectedDiv.removeClass("sidebar-selected");
@@ -133,16 +133,16 @@ Sidebar.prototype.select = function(newdiv, path)
     this.selectedDiv.addClass("sidebar-selected");
 }
 
-Sidebar.prototype.makeSelectFunction = function(newdiv, path)
+FileSystemView.prototype.makeSelectFunction = function(newdiv, path)
 {
-    var thisSidebar = this;
+    var thisFileSystemView = this;
     return function(evt)
     {
-        thisSidebar.select(newdiv, path);
+        thisFileSystemView.select(newdiv, path);
     };
 }
 
-Sidebar.prototype.keyboardUpArrow = function()
+FileSystemView.prototype.keyboardUpArrow = function()
 {
     var selectables = $("div.sidebar-selectable");
     var index = selectables.index(this.selectedDiv);
@@ -153,7 +153,7 @@ Sidebar.prototype.keyboardUpArrow = function()
     }
 }
 
-Sidebar.prototype.keyboardDownArrow = function()
+FileSystemView.prototype.keyboardDownArrow = function()
 {
     var selectables = $("div.sidebar-selectable");
     var index = selectables.index(this.selectedDiv);
@@ -164,7 +164,7 @@ Sidebar.prototype.keyboardDownArrow = function()
     }
 }
 
-Sidebar.prototype.keyboardRightArrow = function()
+FileSystemView.prototype.keyboardRightArrow = function()
 {
     if( this.selectedDiv )
     {
@@ -172,7 +172,7 @@ Sidebar.prototype.keyboardRightArrow = function()
     }
 }
 
-Sidebar.prototype.keyboardLeftArrow = function()
+FileSystemView.prototype.keyboardLeftArrow = function()
 {
     if( this.selectedDiv )
     {
