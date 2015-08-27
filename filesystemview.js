@@ -56,9 +56,6 @@ FileSystemView.join = function(a, b)
 
 FileSystemView.prototype.makeDivForRecord = function(record, parent_path)
 {
-    console.log(record);
-
-
     var blockDiv = $('<div class="sidebar-block">');
     var labelDiv = $('<div class="sidebar-label sidebar-selectable">');
     var arrow = $('<span class="sidebar-arrow">');
@@ -196,12 +193,12 @@ FileSystemView.prototype.remove = function(path)
 
 FileSystemView.prototype.rename = function(oldpath, newname)
 {
-    this.fileList.remove(oldpath, newname);
+    this.fileList.rename(oldpath, newname);
 }
 
 FileSystemView.prototype.move = function(oldpath, newpath)
 {
-    this.fileList.move(oldpath, newname);
+    this.fileList.move(oldpath, newpath);
 }
 
 
