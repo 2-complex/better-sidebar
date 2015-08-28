@@ -70,7 +70,7 @@ jsonSidebarObject = {
         return {name:"ERROR", children: []};
     } ,
 
-    nodeForPath: function( path )
+    getInfo: function( path )
     {
         cursor = this.root;
 
@@ -85,7 +85,7 @@ jsonSidebarObject = {
 
     ls: function( path )
     {
-        return this.nodeForPath(path).children;
+        return this.getInfo(path).children;
     } ,
 
     add: function( path, type )
@@ -93,7 +93,7 @@ jsonSidebarObject = {
         var parent = path.split('/').slice(0,-1).join('/');
         var name = path.split('/').slice(-1)[0];
 
-        this.nodeForPath( parent ).children.push(
+        this.getInfo( parent ).children.push(
             {
                 name: name,
                 type: type,
@@ -105,7 +105,7 @@ jsonSidebarObject = {
     {
         var parent = path.split('/').slice(0,-1).join('/');
         var name = path.split('/').slice(-1)[0];
-        var parent_node = this.nodeForPath(parent);
+        var parent_node = this.getInfo(parent);
 
         this.removeChild( parent_node, name );
     } ,
@@ -118,15 +118,15 @@ jsonSidebarObject = {
         var source_parent = source_path.split('/').slice(0,-1).join('/');
         var source_name = source_path.split('/').slice(-1)[0];
 
-        var node = this.removeChild( this.nodeForPath( source_parent ), source_name );
+        var node = this.removeChild( this.getInfo( source_parent ), source_name );
         node.name = target_name;
 
-        this.nodeForPath( target_parent ).children.push(node);
+        this.getInfo( target_parent ).children.push(node);
     } ,
 
     rename: function( oldpath, newname )
     {
-        this.nodeForPath(oldpath).name = newname;
+        this.getInfo(oldpath).name = newname;
     } ,
 };
 

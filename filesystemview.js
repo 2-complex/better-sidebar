@@ -70,16 +70,16 @@ FileSystemView.prototype.makeDivForRecord = function(record, parent_path)
             "drive":"drive"
         }[record.type] || "file", "icon type-icon");
 
-    labelDiv.append( icon, $('<span>').html(record.name) );
+    labelDiv.append( icon, $('<span class="sidebar-name-text">').html(record.name) );
 
     labelDiv.on( 'click', this.makeSelectFunction( labelDiv, path ) );
 
     if( record.type == 'directory' ||
         record.type == 'drive' )
     {
-        arrow.empty().append( dgn.getIconSvg("right") );
+        arrow.empty().append( dgn.getIconSvg( "right" ) );
         arrow.addClass('sidebar-expandable');
-        var expandFunction = this.makeExpandFunction(blockDiv, path );
+        var expandFunction = this.makeExpandFunction( blockDiv );
         labelDiv.data("expandFunction", expandFunction);
         arrow.on( 'click', expandFunction );
     }
@@ -88,17 +88,17 @@ FileSystemView.prototype.makeDivForRecord = function(record, parent_path)
         labelDiv.data("expandFunction", function(){} );
     }
 
-    labelDiv.data("path", path);
     blockDiv.data("path", path);
 
     return blockDiv;
 }
 
-FileSystemView.prototype.makeExpandFunction = function(block, path)
+FileSystemView.prototype.makeExpandFunction = function(block)
 {
     var thisFileSystemView = this;
     return function(evt)
     {
+        var path = block.data("path");
         var listDiv = block.find( "> div.sidebar-list" );
         var arrow = block.find( "> div.sidebar-label > span.sidebar-arrow" );
 
@@ -182,6 +182,31 @@ FileSystemView.prototype.keyboardLeftArrow = function()
 }
 
 
+FileSystemView.prototype.getBlockName = function(block)
+{
+    return block.find( "> div.sidebar-label > span.sidebar-name-text" ).html();
+}
+
+FileSystemView.prototype.setBlockName = function(block, newname)
+{
+    return block.find( "> div.sidebar-label > span.sidebar-name-text" ).html(newname);
+}
+
+FileSystemView.prototype.getPathForBlock = function(block)
+{
+    if( block.parent().parent().hasClass("sidebar-block") )
+    {
+        return Path.join(
+            this.getPathForBlock(block.parent().parent(),
+            this.getBlockName(block) ) );
+    }
+    else
+    {
+        return this.getBlockName(block);
+    }
+}
+
+
 FileSystemView.prototype.add = function( path, type )
 {
     this.fileList.add(path, type);
@@ -209,38 +234,63 @@ FileSystemView.prototype.add = function( path, type )
 
 FileSystemView.prototype.remove = function( path )
 {
-    this.fileList.remove(path);
+    this.fileList.remove( path );
+    this.getBlockDiv( path ).remove();
+}
 
-    var block = this.getBlockDiv( path );
+FileSystemView.prototype.udpateAllChildPaths = function( oldpath, newpath )
+{
+    var block = this.getBlockDiv( oldpath );
 
-    if( block )
-    {
-        block.remove();
-    }
+    block.add( block.find(".sidebar-block") )
+        .map( function()
+        {
+            $(this).data( "path", newpath + $(this).data("path").slice( oldpath.length ) );
+        }
+    );
 }
 
 FileSystemView.prototype.rename = function( oldpath, newname )
 {
-    this.fileList.rename(oldpath, newname);
+    this.fileList.rename( oldpath, newname );
+
+    var block = this.getBlockDiv( oldpath );
+    block.find( "> div.sidebar-label > span.sidebar-name-text" ).html( newname );
+    var newpath = Path.join( Path.parent(oldpath), newname );
+    this.udpateAllChildPaths( oldpath, newpath );
 }
 
 FileSystemView.prototype.move = function( oldpath, newpath )
 {
-    this.fileList.move(oldpath, newpath);
+    this.fileList.move( oldpath, newpath );
+
+    var block = this.getBlockDiv( oldpath ).detach();
+    this.setBlockName( block, Path.front( newpath ) );
+
+    var newparent = Path.parent( newpath );
+    var newListDiv = this.getBlockDiv( newparent ).find( "> div.sidebar-list" );
+
+    if( newListDiv.length != 0 )
+    {
+        if( block.length == 0 )
+        {
+            block = this.makeDivForRecord(this.fileList.getInfo( newpath ), newparent);
+        }
+        newListDiv.append( block );
+    }
+
+    this.udpateAllChildPaths( oldpath, newpath );
 }
 
 FileSystemView.prototype.refresh = function( path )
 {
-    this.fileList.move(oldpath, newpath);
+    this.fileList.move( oldpath, newpath );
 }
 
 
 FileSystemView.prototype.getInfo = function( path )
 {
-    return {
-        path: "something wrong",
-        type: "file"
-    };
+    return this.fileList.getInfo( path );
 }
 
 FileSystemView.prototype.getBlockDiv = function(path)
@@ -248,7 +298,7 @@ FileSystemView.prototype.getBlockDiv = function(path)
     return this.sidebarBody.find(".sidebar-block")
         .filter( function()
         {
-            return $(this).data('path') == path;
+            return $(this).data("path") == path;
         });
 }
 
