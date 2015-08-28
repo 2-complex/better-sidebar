@@ -89,6 +89,7 @@ FileSystemView.prototype.makeDivForRecord = function(record, parent_path)
     }
 
     labelDiv.data("path", path);
+    blockDiv.data("path", path);
 
     return blockDiv;
 }
@@ -181,28 +182,60 @@ FileSystemView.prototype.keyboardLeftArrow = function()
 }
 
 
-FileSystemView.prototype.add = function(path, type)
+FileSystemView.prototype.add = function( path, type )
 {
     this.fileList.add(path, type);
+
+    var parent_path = Path.parent(path);
+    var parentBlock = this.getBlockDiv(Path.parent(path));
+    if( parentBlock )
+    {
+        var listDiv = parentBlock.find( "> div.sidebar-list" );
+        if( listDiv )
+        {
+            parentBlock.find( "> div.sidebar-list" ).append(
+                this.makeDivForRecord(
+                    {
+                        name: Path.front(path),
+                        type: type
+                    },
+                    parent_path
+                )
+            );
+        }
+    }
+
 }
 
-FileSystemView.prototype.remove = function(path)
+FileSystemView.prototype.remove = function( path )
 {
     this.fileList.remove(path);
+
+    var block = this.getBlockDiv( path );
+
+    if( block )
+    {
+        block.remove();
+    }
 }
 
-FileSystemView.prototype.rename = function(oldpath, newname)
+FileSystemView.prototype.rename = function( oldpath, newname )
 {
     this.fileList.rename(oldpath, newname);
 }
 
-FileSystemView.prototype.move = function(oldpath, newpath)
+FileSystemView.prototype.move = function( oldpath, newpath )
+{
+    this.fileList.move(oldpath, newpath);
+}
+
+FileSystemView.prototype.refresh = function( path )
 {
     this.fileList.move(oldpath, newpath);
 }
 
 
-FileSystemView.prototype.getInfo = function(path)
+FileSystemView.prototype.getInfo = function( path )
 {
     return {
         path: "something wrong",
@@ -212,6 +245,11 @@ FileSystemView.prototype.getInfo = function(path)
 
 FileSystemView.prototype.getBlockDiv = function(path)
 {
+    return this.sidebarBody.find(".sidebar-block")
+        .filter( function()
+        {
+            return $(this).data('path') == path;
+        });
 }
 
 FileSystemView.prototype.getFilenameDiv = function(path)
